@@ -1,1 +1,1 @@
-readme
+Retrieve IFC elements and save it in a new file.
