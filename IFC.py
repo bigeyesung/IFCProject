@@ -16,7 +16,7 @@ class ParseIFC:
         self.__filename = None
         self.Init(file)
         
-  def Init(self, file):
+    def Init(self, file):
         if not os.path.isfile(file):
             #Logger().Initialise(LoggerType.CONSOLE.value, LoggerSeverity.ERROR.value)
             Logger().Error("read ifc error: " + file)
@@ -27,7 +27,7 @@ class ParseIFC:
         ifcFile = ifcopenshell.open(file)
         storeys = ifcFile.by_type("IFCBUILDINGSTOREY")
         for storey in storeys:
-           self.__levels[storey.Name] =  storey.Name
+            self.__levels[storey.Name] =  storey.Name
         # categories = ["IfcWall", "IfcRoof"]
         # for category in categories:
         #     elements = ifcFile.by_type(category)
