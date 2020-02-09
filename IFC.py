@@ -43,3 +43,5 @@ class ParseIFC:
             #Logger().Initialise(LoggerType.CONSOLE.value, LoggerSeverity.ERROR.value)
             Logger().Error("read IFC level data error: " + self.__filename)
 
+    def GetInit(self):
+        return self.__init
