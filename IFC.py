@@ -45,3 +45,41 @@ class ParseIFC:
 
     def GetInit(self):
         return self.__init
+
+    def RemoveTypeElement(self):
+        if not self.__init:
+            return
+        SaveGUID = []
+        ifcFile = ifcopenshell.open(self.__ifcPath)
+        for category in self.__categories:
+            elements = ifcFile.by_type(category)
+            for element in elements:
+                if element.GlobalId in self.__removeList:
+                    ifcFile.remove(element)
+                    continue
+                contain = element.ContainedInStructure
+                if len(contain) == 0: continue
+                item =  contain[0].RelatingStructure.Name
+
+                ##for For Gravens_Hill_260719 second case
+                # if self.__targetLevel == "00 Ground Floor" and item == "01 First Floor" and element.GlobalId == "3hR3mfu7LA8ed1jTcubv7L":
+                #     SaveGUID.append(element.GlobalId)
+                # elif self.__targetLevel == "01 First Floor" and item == "02 Roof Plan" and element.GlobalId == "0s8adBwwP3wO0g27aFJZfR":
+                #     SaveGUID.append(element.GlobalId)
+                # elif self.__targetLevel == "01 First Floor" and item == "02 Roof Plan" and element.GlobalId == "0s8adBwwP3wO0g27aFJZeb":
+                #     SaveGUID.append(element.GlobalId)
+                # else:
+                #     if item != self.__targetLevel:
+                #         ifcFile.remove(element)
+                #     else:
+                #         SaveGUID.append(element.GlobalId)
+
+                if item != self.__targetLevel:
+                    print(element.Name)
+                    ifcFile.remove(element)
+                else:
+                    SaveGUID.append(element.GlobalId)
+
+
+        ifcFile.write(self.__ifcPath)
+        return SaveGUID
