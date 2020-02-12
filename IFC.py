@@ -61,6 +61,19 @@ class ParseIFC:
                 if len(contain) == 0: continue
                 item =  contain[0].RelatingStructure.Name
 
+                ##for For Gravens_Hill_260719 second case
+                # if self.__targetLevel == "00 Ground Floor" and item == "01 First Floor" and element.GlobalId == "3hR3mfu7LA8ed1jTcubv7L":
+                #     SaveGUID.append(element.GlobalId)
+                # elif self.__targetLevel == "01 First Floor" and item == "02 Roof Plan" and element.GlobalId == "0s8adBwwP3wO0g27aFJZfR":
+                #     SaveGUID.append(element.GlobalId)
+                # elif self.__targetLevel == "01 First Floor" and item == "02 Roof Plan" and element.GlobalId == "0s8adBwwP3wO0g27aFJZeb":
+                #     SaveGUID.append(element.GlobalId)
+                # else:
+                #     if item != self.__targetLevel:
+                #         ifcFile.remove(element)
+                #     else:
+                #         SaveGUID.append(element.GlobalId)
+
                 if item != self.__targetLevel:
                     print(element.Name)
                     ifcFile.remove(element)
@@ -70,3 +83,20 @@ class ParseIFC:
 
         ifcFile.write(self.__ifcPath)
         return SaveGUID
+
+    def RemoveRedundantElement(self):
+    if not self.__init:
+        return
+
+    # These types 
+    ifcFile = ifcopenshell.open(self.__ifcPath)
+    categories = ["IfcWindow", "IfcDoor", "IfcRailing", "IfcStair", 
+                    "ifcRamp", "IfcBuildingElementProxy", 
+                    "IfcAnnotation", "IfcCovering", "IfcSpace", "IfcFurnishingElement", 
+                    "IfcFlowTerminal", "IfcFlowSegment", "IfcFlowFitting",
+                    "IfcFlowController", "IfcElectricDistributionPoint"]
+    for category in categories:
+        elements = ifcFile.by_type(category)
+        for element in elements:
+            ifcFile.remove(element)
+    ifcFile.write(self.__ifcPath)
