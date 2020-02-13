@@ -85,18 +85,18 @@ class ParseIFC:
         return SaveGUID
 
     def RemoveRedundantElement(self):
-    if not self.__init:
-        return
+        if not self.__init:
+            return
 
-    # These types 
-    ifcFile = ifcopenshell.open(self.__ifcPath)
-    categories = ["IfcWindow", "IfcDoor", "IfcRailing", "IfcStair", 
-                    "ifcRamp", "IfcBuildingElementProxy", 
-                    "IfcAnnotation", "IfcCovering", "IfcSpace", "IfcFurnishingElement", 
-                    "IfcFlowTerminal", "IfcFlowSegment", "IfcFlowFitting",
-                    "IfcFlowController", "IfcElectricDistributionPoint"]
-    for category in categories:
-        elements = ifcFile.by_type(category)
-        for element in elements:
-            ifcFile.remove(element)
-    ifcFile.write(self.__ifcPath)
+        # These types 
+        ifcFile = ifcopenshell.open(self.__ifcPath)
+        categories = ["IfcWindow", "IfcDoor", "IfcRailing", "IfcStair", 
+                        "ifcRamp", "IfcBuildingElementProxy", 
+                        "IfcAnnotation", "IfcCovering", "IfcSpace", "IfcFurnishingElement", 
+                        "IfcFlowTerminal", "IfcFlowSegment", "IfcFlowFitting",
+                        "IfcFlowController", "IfcElectricDistributionPoint"]
+        for category in categories:
+            elements = ifcFile.by_type(category)
+            for element in elements:
+                ifcFile.remove(element)
+        ifcFile.write(self.__ifcPath)
