@@ -100,3 +100,22 @@ class ParseIFC:
             for element in elements:
                 ifcFile.remove(element)
         ifcFile.write(self.__ifcPath)
+
+    def SetRemoveList(self, li = []):
+        if not self.__init:
+            return
+        self.__removeList = li
+
+    def Del(self, src):
+        types = ["IFCWALL", "IFCSLAB", "IFCCOLUMN"]
+        for fielpath in src:
+            ifcFile = ifcopenshell.open(fielpath)
+            for eletype in types:
+                elements = ifcFile.by_type(eletype)
+                for element in elements:
+                    if element.GlobalId == "1DIyRBByj18Ax$rOEtI14l":
+                        continue
+                    if element.GlobalId == "2sOXiqxR11FPF$18FGYBQO":
+                        continue
+                    ifcFile.remove(element)
+            ifcFile.write(fielpath)
