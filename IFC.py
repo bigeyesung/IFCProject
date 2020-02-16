@@ -119,3 +119,42 @@ class ParseIFC:
                         continue
                     ifcFile.remove(element)
             ifcFile.write(fielpath)
+
+    def MergeIFC(self,src):
+    if not self.__init:
+        return
+    if len(src)<=1:
+        return
+    self.__ifcPath = src[0]
+    ifcFile = ifcopenshell.open(self.__ifcPath)
+    ifcFile2 = ifcopenshell.open(src[1])
+    # wall_ifc1 = ifcFile.by_guid("2sOXiqxR11FPF$18FGYBQO")       
+    stories = ifcFile2.by_type("IFCBUILDINGSTOREY")
+    openings = ifcFile2.by_type("IFCOPENINGELEMENT")
+    cutopenings = ifcFile2.by_type("IFCRELVOIDSELEMENT")
+    contains = ifcFile2.by_type("IFCRELCONTAINEDINSPATIALSTRUCTURE")
+    aggres  = ifcFile2.by_type("IFCRELAGGREGATES")
+    materials = ifcFile2.by_type("IFCRELASSOCIATESMATERIAL")
+    pros = ifcFile2.by_type("IFCRELDEFINESBYPROPERTIES")
+
+    wall2 = ifcFile2.by_type("IFCWALL")
+    
+    for storey in stories:
+        ifcFile.add(storey)
+    for wall in wall2:
+        ifcFile.add(wall)
+    for opening in openings:
+        ifcFile.add(opening)
+    for cut in cutopenings:
+        ifcFile.add(cut)
+    for contain in contains:
+        ifcFile.add(contain)
+    for aggre in aggres:
+        ifcFile.add(aggre)
+    for pro in pros:
+        ifcFile.add(pro)
+    for mat in materials:
+        ifcFile.add(mat)
+    ifcFile.write(self.__ifcPath)
+
+    print("ok")
