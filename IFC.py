@@ -158,3 +158,20 @@ class ParseIFC:
         ifcFile.write(self.__ifcPath)
 
         print("ok")
+
+    def SaveEachFloorIFC(self, src):
+        if not self.__init:
+            return
+        if not os.path.isfile(src):
+            return 
+        # Copy ifc source to remove redundant elements
+        cleanIFC = Path.IFC_DIR.value + self.__filename  + "_clean" + ".ifc"
+        copyfile(src, cleanIFC)
+        self.__ifcPath = cleanIFC
+        # self.RemoveRedundantElement()
+        for level in self.__levels:
+            copyfile(cleanIFC, Path.IFC_DIR.value + self.__filename + "_" + level + ".ifc")
+            self.__ifcPath = Path.IFC_DIR.value + self.__filename + "_" + level + ".ifc"
+            self.__targetLevel = level
+            SaveGUID = self.RemoveTypeElement()
+            self.LoadElementProperty(level, SaveGUID)
