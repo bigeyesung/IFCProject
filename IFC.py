@@ -175,3 +175,10 @@ class ParseIFC:
             self.__targetLevel = level
             SaveGUID = self.RemoveTypeElement()
             self.LoadElementProperty(level, SaveGUID)
+    
+    def SaveEachFloorCSV(self):
+        if not self.__init:
+            return
+
+        for _level, _property in self.__dataProperties.items():
+            WriteCSV( Path.DATA_DIR.value + self.__filename + "_" + _level + ".csv", _property)
