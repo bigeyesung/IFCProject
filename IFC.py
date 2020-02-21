@@ -182,3 +182,7 @@ class ParseIFC:
 
         for _level, _property in self.__dataProperties.items():
             WriteCSV( Path.DATA_DIR.value + self.__filename + "_" + _level + ".csv", _property)
+
+if __name__ == "__main__":
+    # sample
+    parser = ParseIFC("file")
