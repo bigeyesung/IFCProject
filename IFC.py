@@ -84,6 +84,19 @@ class ParseIFC:
         ifcFile.write(self.__ifcPath)
         return SaveGUID
 
+    def LoadElementProperty(self, level, SaveGUID):
+        if not self.__init:
+            return
+        ifcFile = ifcopenshell.open(self.__ifcPath)
+        dataProperty = []
+        dataProperty.append(["guid", "resource", "start", "groups", "ifcName", "name", "end", "dependency"])
+        for guid in SaveGUID:
+            element = ifcFile.by_guid(guid)
+            ifc_name = element.Name.replace(":", "_")
+            dataProperty.append([element.GlobalId, "default", "08/08/19 08:00:00", 
+                                [level, 'concrete wall'], ifc_name, 
+                                element.Name, "08/09/19 17:00:00", "default"]) 
+
     def RemoveRedundantElement(self):
         if not self.__init:
             return
