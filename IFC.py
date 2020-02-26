@@ -185,6 +185,14 @@ class ParseIFC:
         for _level, _property in self.__dataProperties.items():
             WriteCSV( Path.DATA_DIR.value + self.__filename + "_" + _level + ".csv", _property)
 
+
+    def job(v, num): for _ in range(10): 
+        import multiprocessing as mp
+        import time
+        time.sleep(0.1) v.value += num # 使用共享資料取值要用 value print(v.value) 
+        def multicode(): v = mp.Value("i",0) # 宣告一個 process 之間共享的變數 p1 = mp.Process(target=job, args=(v,1)) # 把 v 傳值進去 
+        p2 = mp.Process(target=job, args=(v,3)) p1.start() p2.start() p1.join() p2.join()
+
 if __name__ == "__main__":
     # sample
     parser = ParseIFC("file")
