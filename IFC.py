@@ -10,6 +10,7 @@ class ParseIFC:
         self.__removeList = []
         self.__dataProperties = {}
         self.__categories = ["IfcWall", "IfcSlab", "IfcRoof", "IfcColumn", "IfcBeam"]
+        self.__categories_service = ["IFCFLOWSEGMENT", "IFCBUILDINGELEMENTPROXY", "IFCFLOWTERMINAL", "IFCFLOWCONTROLLER", "IFCFLOWFITTING"]
         self.__ifcPath = None
         self.__targetLevel = None
         self.__init = False
