@@ -26,10 +26,9 @@ class ParseRoi:
 
 if __name__ == "__main__":
     table = {}
+    # given index range, and give it table
     for id in range(195,220):
         fileName = "roi/DJI_0" + str(id) + ".xml"
         parser = ParseRoi(fileName)
         fileData = parser.ParseData()
         table[fileName] = fileData
-
-    print("done")
