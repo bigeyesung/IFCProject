@@ -124,7 +124,9 @@ class ParseIFC:
         if not self.__init:
             return
         ifcFile2 = ifcopenshell.open(src)
-        # wall_ifc1 = ifcFile.by_guid("2sOXiqxR11FPF$18FGYBQO")       
+        # wall_ifc1 = ifcFile.by_guid("2sOXiqxR11FPF$18FGYBQO")
+        project = ifcFile2.by_type("IFCPROJECT")
+        site = ifcFile2.by_type("IFCSITE")       
         stories = ifcFile2.by_type("IFCBUILDINGSTOREY")
         openings = ifcFile2.by_type("IFCOPENINGELEMENT")
         cutopenings = ifcFile2.by_type("IFCRELVOIDSELEMENT")
@@ -134,7 +136,8 @@ class ParseIFC:
         pros = ifcFile2.by_type("IFCRELDEFINESBYPROPERTIES")
 
         wall2 = ifcFile2.by_type("IFCWALL")
-        
+        # self.__ifcPath.add(project)
+        # self.__ifcPath.add(site)
         for storey in stories:
             self.__ifcPath.add(storey)
         for wall in wall2:
