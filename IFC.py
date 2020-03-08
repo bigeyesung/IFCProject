@@ -1,9 +1,6 @@
 import ifcopenshell
 import os
 from shutil import copyfile
-from utils.utils import WriteCSV
-from utils.enums import Path
-from logger import Logger
 class ParseIFC:
     def __init__(self, file):
         self.__levels = {}
@@ -20,13 +17,13 @@ class ParseIFC:
     def Init(self, file):
         if not os.path.isfile(file):
             #Logger().Initialise(LoggerType.CONSOLE.value, LoggerSeverity.ERROR.value)
-            Logger().Error("read ifc error: " + file)
+            print("read file error")
             return
 
         basename = os.path.basename(file)
         self.__filename, _ = os.path.splitext(basename)
-        ifcFile = ifcopenshell.open(file)
-        storeys = ifcFile.by_type("IFCBUILDINGSTOREY")
+        self.__ifcPath = ifcopenshell.open(file)
+        storeys = self.__ifcPath.by_type("IFCBUILDINGSTOREY")
         for storey in storeys:
             self.__levels[storey.Name] =  storey.Name
         # categories = ["IfcWall", "IfcRoof"]
@@ -42,7 +39,7 @@ class ParseIFC:
             self.__init = True
         else:
             #Logger().Initialise(LoggerType.CONSOLE.value, LoggerSeverity.ERROR.value)
-            Logger().Error("read IFC level data error: " + self.__filename)
+            print("read IFC level data error: ")
 
     def GetInit(self):
         return self.__init
@@ -126,11 +123,7 @@ class ParseIFC:
     def MergeIFC(self,src):
         if not self.__init:
             return
-        if len(src)<=1:
-            return
-        self.__ifcPath = src[0]
-        ifcFile = ifcopenshell.open(self.__ifcPath)
-        ifcFile2 = ifcopenshell.open(src[1])
+        ifcFile2 = ifcopenshell.open(src)
         # wall_ifc1 = ifcFile.by_guid("2sOXiqxR11FPF$18FGYBQO")       
         stories = ifcFile2.by_type("IFCBUILDINGSTOREY")
         openings = ifcFile2.by_type("IFCOPENINGELEMENT")
@@ -143,22 +136,22 @@ class ParseIFC:
         wall2 = ifcFile2.by_type("IFCWALL")
         
         for storey in stories:
-            ifcFile.add(storey)
+            self.__ifcPath.add(storey)
         for wall in wall2:
-            ifcFile.add(wall)
+            self.__ifcPath.add(wall)
         for opening in openings:
-            ifcFile.add(opening)
+            self.__ifcPath.add(opening)
         for cut in cutopenings:
-            ifcFile.add(cut)
+            self.__ifcPath.add(cut)
         for contain in contains:
-            ifcFile.add(contain)
+            self.__ifcPath.add(contain)
         for aggre in aggres:
-            ifcFile.add(aggre)
+            self.__ifcPath.add(aggre)
         for pro in pros:
-            ifcFile.add(pro)
+            self.__ifcPath.add(pro)
         for mat in materials:
-            ifcFile.add(mat)
-        ifcFile.write(self.__ifcPath)
+            self.__ifcPath.add(mat)
+        self.__ifcPath.write("one_wall.ifc")
 
         print("ok")
 
@@ -187,13 +180,17 @@ class ParseIFC:
             WriteCSV( Path.DATA_DIR.value + self.__filename + "_" + _level + ".csv", _property)
 
 
-    def job(v, num): for _ in range(10): 
-        import multiprocessing as mp
-        import time
-        time.sleep(0.1) v.value += num # 使用共享資料取值要用 value print(v.value) 
-        def multicode(): v = mp.Value("i",0) # 宣告一個 process 之間共享的變數 p1 = mp.Process(target=job, args=(v,1)) # 把 v 傳值進去 
-        p2 = mp.Process(target=job, args=(v,3)) p1.start() p2.start() p1.join() p2.join()
+    # def job(v, num): for _ in range(10): 
+    #     import multiprocessing as mp
+    #     import time
+    #     time.sleep(0.1) v.value += num # 使用共享資料取值要用 value print(v.value) 
+    #     def multicode(): v = mp.Value("i",0) # 宣告一個 process 之間共享的變數 p1 = mp.Process(target=job, args=(v,1)) # 把 v 傳值進去 
+    #     p2 = mp.Process(target=job, args=(v,3)) p1.start() p2.start() p1.join() p2.join()
 
 if __name__ == "__main__":
     # sample
-    parser = ParseIFC("file")
+    parser = ParseIFC("one_wall.ifc")
+    if parser.GetInit():
+        parser.MergeIFC("ST_onewall.ifc")
+        # parser.SaveEachFloorIFC("file")
+        # parser.SaveEachFloorCSV()
