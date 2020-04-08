@@ -49,8 +49,6 @@ class ParseIFC:
                 if len(contain) == 0: continue
                 item =  contain[0].RelatingStructure.Name
 
-                #for For Gravens_Hill_260719 second case
-
                 if item != self.__targetLevel:
                     print(element.Name)
                     ifcFile.remove(element)
@@ -103,10 +101,6 @@ class ParseIFC:
             for eletype in types:
                 elements = ifcFile.by_type(eletype)
                 for element in elements:
-                    if element.GlobalId == "1DIyRBByj18Ax$rOEtI14l":
-                        continue
-                    if element.GlobalId == "2sOXiqxR11FPF$18FGYBQO":
-                        continue
                     ifcFile.remove(element)
             ifcFile.write(fielpath)
 
@@ -154,13 +148,13 @@ class ParseIFC:
         if not os.path.isfile(src):
             return 
         # Copy ifc source to remove redundant elements
-        cleanIFC = Path.IFC_DIR.value + self.__filename  + "_clean" + ".ifc"
+        cleanIFC = self.__filename  + "_clean" + ".ifc"
         copyfile(src, cleanIFC)
         self.__ifcPath = cleanIFC
         # self.RemoveRedundantElement()
         for level in self.__levels:
-            copyfile(cleanIFC, Path.IFC_DIR.value + self.__filename + "_" + level + ".ifc")
-            self.__ifcPath = Path.IFC_DIR.value + self.__filename + "_" + level + ".ifc"
+            copyfile(cleanIFC, self.__filename + "_" + level + ".ifc")
+            self.__ifcPath = self.__filename + "_" + level + ".ifc"
             self.__targetLevel = level
             SaveGUID = self.RemoveTypeElement()
             self.LoadElementProperty(level, SaveGUID)
@@ -170,7 +164,7 @@ class ParseIFC:
             return
 
         for _level, _property in self.__dataProperties.items():
-            WriteCSV( Path.DATA_DIR.value + self.__filename + "_" + _level + ".csv", _property)
+            WriteCSV( self.__filename + "_" + _level + ".csv", _property)
 
 
     # def job(v, num): for _ in range(10): 
