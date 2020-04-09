@@ -2,6 +2,11 @@ from numba import jit
 import numpy as np
 import time
 
+
+var = 1
+if type(var) == float:
+   print('your variable is an integer')
+
 SQRT_2PI = np.sqrt(2 * np.pi)
 
 @jit(nopython=True, parallel=True)
