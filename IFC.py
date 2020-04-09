@@ -175,6 +175,10 @@ class ParseIFC:
     #     p2 = mp.Process(target=job, args=(v,3)) p1.start() p2.start() p1.join() p2.join()
 
 if __name__ == "__main__":
+    a = [1,2,3,4]
+    a = a[::-1]
+    b = ["a","b","c"]
+    b = b[::-1]
     # sample
     parser = ParseIFC("one_wall.ifc")
     if parser.GetInit():
