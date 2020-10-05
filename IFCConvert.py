@@ -1,7 +1,8 @@
 #Originally from here
 # https://forums.buildingsmart.org/t/ifcgloballyuniqueids-spec-description-is-incorrect-proposal-to-simplify/1083/2
 # I rewrite it to python3 version
-
+# Complete concepts:
+# https://thebuildingcoder.typepad.com/blog/2009/02/uniqueid-dwf-and-ifc-guid.html
 import base64
 import uuid
 
